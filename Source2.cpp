@@ -5,39 +5,55 @@
 #include <cmath>
 #include <algorithm>
 #include "Header1.hpp"
+#include <fstream>
 
+int Coef[11];
 
-int main() {
+int main(int argc,char* agrv[]) {
+    // Working with file
+    if (argc == 1) {
+        std::cout << "Error" << std::endl;
+        return 1;
+    }
+    std::ifstream file;
+    file.open(agrv[1]);
+    if (!file.is_open()) {
+        std::cout << "Failed to open file" << std::endl;
+        return 1;
+    }
+    // Reading from file
+    for (int i = 0; i < 11; i++) {
+        file >> Coef[i];
+    }
     srand(time(NULL));
-    // Создание начальной популяции
+    // Start population creation
     std::vector<Genome> population(POPULATION_SIZE);
-    // Основной цикл генетического алгоритма
+    // Main cycle of Genetic Algorythm
     for (int generation = 0; generation < MAX_GENERATIONS; ++generation) {
-        // Вычисление приспособленности для каждого генома
+        // Fitnes Calculation
         for (Genome& genome : population) {
             genome.calculateFitness();
         }
-        // Сортировка популяции по убыванию приспособленности
+        // Population fitness sorting
         std::sort(population.begin(), population.end(), sortByFitness);
 
-        // Печать лучшего решения текущего поколения
+        // Print current generation
         std::cout << "Generation " << generation << ": Best solution - x = " << population[0].value
             << ", Fitness = " << population[0].fitness << std::endl;
-        // Проверка достижения целевой приспособленности
+        // Target fitness check
         if (population[0].fitness > TARGET_FITNESS) {
             std::cout << "Solution found in generation " << generation << ": x = " << population[0].value << std::endl;
             break;
-        }
-
-        // Создание новой популяции
+        
+        // New population create
         std::vector<Genome> newPopulation(POPULATION_SIZE);
 
-        // Копирование лучших особей в новую популяцию
+        // Copying best individuals to New population
         for (int i = 0; i < POPULATION_SIZE / 2; ++i) {
             newPopulation[i] = population[i];
         }
 
-        // Генерация потомков с помощью скрещивания
+        // Parent generation with Crossingover and Mutation
         for (int i = POPULATION_SIZE / 2; i < POPULATION_SIZE; ++i) {
             // Выбор двух случайных родителей из текущей популяции
             int parent1Index = rand() % (POPULATION_SIZE / 2);
@@ -50,7 +66,7 @@ int main() {
             mutate(newPopulation[i]);
         }
 
-        // Замена старой популяции новой
+        // Population replacing
         population = newPopulation;
     }
 
