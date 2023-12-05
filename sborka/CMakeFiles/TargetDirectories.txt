@@ -1,0 +1,3 @@
+C:/Users/SteveKameron/source/repos/GENA/sborka/CMakeFiles/GENA.dir
+C:/Users/SteveKameron/source/repos/GENA/sborka/CMakeFiles/edit_cache.dir
+C:/Users/SteveKameron/source/repos/GENA/sborka/CMakeFiles/rebuild_cache.dir
